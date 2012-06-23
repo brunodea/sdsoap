@@ -20,13 +20,13 @@ sys.path.append('../')
 import logging
 import traceback as tb
 import suds.metrics as metrics
-from tests import *
 from suds import WebFault
 from suds.client import Client
 
 errors = 0
 
-setup_logging()
+logging.basicConfig(level=logging.INFO)
+logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
 #logging.getLogger('suds.client').setLevel(logging.DEBUG)
 #logging.getLogger('suds.metrics').setLevel(logging.DEBUG)
@@ -39,30 +39,39 @@ def start(url):
     print 'Teste @ ( %s ) %d' % (url, errors)
 
 
-try:
-    url = "http://www.gamecompare.com/GameCompare.asmx?WSDL"
-    start(url)
-    #timer.start()
-    client = Client(url)
-    # print 'fuck this %s' % client
-    print client
-    result = client.service.Search('SourceControl', 'megaman')
-    print result
-    #client.setport(0)
-   #  timer.stop()
-   # print 'create client: %s' % timer
-   # timer.start()
-   # s = str(client)
-   # timer.stop()
-   # print 'str(client): %s' % timer
-   # print 'client:\n%s' % s
-except WebFault, f:
-    errors += 1
-    print f
-    print f.fault
-except Exception, e:
-    errors += 1
-    print e
-    tb.print_exc()
+def getGamePlatform(display_string):
+    reverse = display_string[::-1]
+    res = reverse[1:reverse.find('(')]
+    res = res[::-1]
 
-print '\nFinished: errors = %d' % errors
+    return res
+
+def main():
+    errors = 0
+    try:
+        url = "http://www.gamecompare.com/GameCompare.asmx?WSDL"
+        start(url)
+        client = Client(url)
+#        print 'CLIENTE:'
+#        print client
+        result = client.service.Search('SourceControl', 'megaman')
+#        print '--------------------------------------------------'
+#        print 'RESULTADO:'
+        for title, res in result.colResults:
+            for r in res:
+                print 'Jogo: %s\nPlataforma: %s' % (r.SelectString,getGamePlatform(r.DisplayString))
+                print '-------------------------------------------------------'
+
+    except WebFault, f:
+        errors += 1
+        print f
+        print f.fault
+    except Exception, e:
+        errors += 1
+        print e
+        tb.print_exc()
+
+    print '\nFinished: errors = %d' % errors
+
+if __name__=="__main__":
+    main()
