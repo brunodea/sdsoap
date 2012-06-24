@@ -1,11 +1,11 @@
-import urllib2
+0import urllib2
 
 def amazon_test_url():
     import base64, hashlib, hmac, time
     from urllib import urlencode, quote_plus
 
-    AWS_ACCESS_KEY_ID = 'AKIAJVVX34AAKEOTDIDA'
-    AWS_SECRET_ACCESS_KEY = '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'  
+    AWS_ACCESS_KEY_ID = 'ACCESS_KEY_DO_DAVI'
+    AWS_SECRET_ACCESS_KEY = 'SECRET_ACCESS_KEY_DO_DAVI'  
     TEST_ISBN = '9780735619678' #http://stackoverflow.com/questions/1711/what-is-the-single-most-influential-book-every-programmer-should-read
 
     base_url = "http://webservices.amazon.com/onca/xml"
