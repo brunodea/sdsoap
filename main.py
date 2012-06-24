@@ -20,6 +20,7 @@ def main():
     # Mostra a janela
     list = ['Hello Kitty Online', 'Barbie Dress-Up', 'Teletubbies']
     gui.setConsoleList(list)
+    gui.setGameList(list)
     gui.setButtonAction(fun, gui)
     gui.show()
     # Finaliza a execucao do Qt quando a janela e fechada

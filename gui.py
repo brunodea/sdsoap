@@ -14,6 +14,8 @@ class GUI(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.statusBar().showMessage('Aguardando busca...')
         self.actionExit.triggered.connect(QCoreApplication.instance().quit)
+        
+        self.gameList.clicked.connect(self.listClicked)
 		
     def setGameName(self, gameName):
         self.gameName.setText(gameName)
@@ -40,18 +42,22 @@ class GUI(QMainWindow, Ui_MainWindow):
     
     def setButtonAction(self, buttonAction, arg):
         self.btSearch.clicked.connect(lambda : buttonAction(arg))
+    
+    def listClicked(self):
+        print 'Clicou na lista'
         
-class ListModel(QAbstractListModel): 
+        
+class ListModel(QAbstractListModel):
     def __init__(self, datain, parent=None, *args): 
         """ datain: a list where each item is a row
         """
         QAbstractListModel.__init__(self, parent, *args) 
         self.listdata = datain
  
-    def rowCount(self, parent=QModelIndex()): 
+    def rowCount(self, parent=QModelIndex()):
         return len(self.listdata)
  
-    def data(self, index, role): 
+    def data(self, index, role):
         if index.isValid() and role == Qt.DisplayRole:
             return QVariant(self.listdata[index.row()])
         else: 
