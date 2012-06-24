@@ -1,4 +1,4 @@
-0import urllib2
+import urllib2
 
 def amazon_test_url():
     import base64, hashlib, hmac, time
