@@ -20,13 +20,13 @@ sys.path.append('../')
 import logging
 import traceback as tb
 import suds.metrics as metrics
-from tests import *
 from suds import WebFault
 from suds.client import Client
 
 errors = 0
 
-setup_logging()
+logging.basicConfig(level=logging.INFO)
+logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
 #logging.getLogger('suds.client').setLevel(logging.DEBUG)
 #logging.getLogger('suds.metrics').setLevel(logging.DEBUG)
@@ -47,7 +47,7 @@ try:
     client = Client(url)
     # print 'fuck this %s' % client
     print client
-    #result = client.service.findItemsByKeywords('megaman')
+    result = client.service.ItemSearch
     #print result
     #client.setport(0)
    #  timer.stop()

@@ -49,18 +49,18 @@ def getGamePlatform(display_string):
 def main():
     errors = 0
     try:
-        url = "http://www.gamecompare.com/GameCompare.asmx?WSDL"
+        url = "http://api.bing.net/search.wsdl"
         start(url)
         client = Client(url)
-#        print 'CLIENTE:'
-#        print client
-        result = client.service.Search('SourceControl', 'megaman')
+        print 'CLIENTE:'
+        print client
+#        result = client.service.Search('SourceControl', 'megaman')
 #        print '--------------------------------------------------'
 #        print 'RESULTADO:'
-        for title, res in result.colResults:
-            for r in res:
-                print 'Jogo: %s\nPlataforma: %s' % (r.SelectString,getGamePlatform(r.DisplayString))
-                print '-------------------------------------------------------'
+#        for title, res in result.colResults:
+#            for r in res:
+#                print 'Jogo: %s\nPlataforma: %s' % (r.SelectString,getGamePlatform(r.DisplayString))
+#                print '-------------------------------------------------------'
 
     except WebFault, f:
         errors += 1
