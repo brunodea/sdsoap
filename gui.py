@@ -1,5 +1,6 @@
 
 import sys
+from PyQt4 import QtCore
 from PyQt4.QtCore import * #QAbstractListModel, QModelIndex
 from PyQt4.QtGui import QMainWindow
 from gui_mainwindow import Ui_MainWindow
@@ -11,6 +12,8 @@ class GUI(QMainWindow, Ui_MainWindow):
         QMainWindow.__init__(self)
         # Inicia a UI criada no Qt Designer
         self.setupUi(self)
+        self.statusBar().showMessage('Aguardando busca...')
+        self.actionExit.triggered.connect(QCoreApplication.instance().quit)
 		
     def setGameName(self, gameName):
         self.gameName.setText(gameName)
@@ -24,6 +27,19 @@ class GUI(QMainWindow, Ui_MainWindow):
     def setGameList(self, gameList):
         lm = ListModel(gameList, self)
         self.gameList.setModel(lm)
+        self.statusBar().showMessage('Busca concluida!')
+        
+    def setConsoleList(self, consoleList):
+        self.cbConsoleList.addItems(consoleList)
+        
+    def getGameValue(self):
+        return self.leNameSearch.text()
+    
+    def getConsoleValue(self):
+        return self.cbConsoleList.currentText()
+    
+    def setButtonAction(self, buttonAction, arg):
+        self.btSearch.clicked.connect(lambda : buttonAction(arg))
         
 class ListModel(QAbstractListModel): 
     def __init__(self, datain, parent=None, *args): 
@@ -33,7 +49,7 @@ class ListModel(QAbstractListModel):
         self.listdata = datain
  
     def rowCount(self, parent=QModelIndex()): 
-        return len(self.listdata) 
+        return len(self.listdata)
  
     def data(self, index, role): 
         if index.isValid() and role == Qt.DisplayRole:
