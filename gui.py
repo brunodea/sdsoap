@@ -34,6 +34,7 @@ class GUI(QMainWindow, Ui_MainWindow):
         self.statusBar().showMessage('Busca concluida!')
         
     def setConsoleList(self, consoleList):
+        self.cbConsoleList.clear()
         self.cbConsoleList.addItems(consoleList)
         
     def getGameValue(self):
