@@ -56,42 +56,46 @@ def getGamesFromSearch(search):
         responses = response.colResults.SearchResult
 
         for r in responses:
-            name = r.SelectString
-            platform = getGamePlatform(r.DisplayString)
-            gameid = r.ItemID
+            try:
+                name = r.SelectString
+                str(name)
+                platform = getGamePlatform(r.DisplayString)
+                gameid = r.ItemID
 
-            game = Game(name=name,platform=platform,gameid=gameid)
-            #print game
+                game = Game(name=name,platform=platform,gameid=gameid)
+                #print game
 
-            result.append(game)
-            
-        passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
-        passman.add_password(None, MS_URL,' ',MS_KEY)
+                result.append(game)
+            except Exception as e:
+               pass
+        return_stmt = result
+#        passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
+#        passman.add_password(None, MS_URL,' ',MS_KEY)
         
-        authhandler = urllib2.HTTPBasicAuthHandler(passman)
-        opener = urllib2.build_opener(authhandler)
+#        authhandler = urllib2.HTTPBasicAuthHandler(passman)
+#        opener = urllib2.build_opener(authhandler)
         
-        urllib2.install_opener(opener)
-        return_stmt = []
-        for r in result:
-            print '-----------------------Get Image Request-------------------------'
+#        urllib2.install_opener(opener)
+#        return_stmt = []
+#        for r in result:
+#            print '-----------------------Get Image Request-------------------------'
             
-            query = '\''+r.name + ' ' + r.platform +'\''
-            query = urllib.urlencode({'Query':query,'$top':NUM_IMGS})
-            url = MS_URL+'?'+query
-            with contextlib.closing(urllib2.urlopen(url)) as x:
-                data = x.read()
-                dom = parseString(data)
-                xmltag = dom.getElementsByTagName('d:MediaUrl')
-                gameimages = []
-                for elem in xmltag:
-                    xml = elem.toxml()
-                    imageurl = xml.replace('<d:MediaUrl m:type="Edm.String">','').replace('</d:MediaUrl>','')
-                    if '.png' in imageurl or '.jpg' in imageurl:
-                        gameimages.append(imageurl)
-                        print imageurl
-                r.imgs = gameimages
-                return_stmt.append(r)               
+#            query = '\''+r.name + ' ' + r.platform +'\''
+#            query = urllib.urlencode({'Query':query,'$top':NUM_IMGS})
+#            url = MS_URL+'?'+query
+#            with contextlib.closing(urllib2.urlopen(url)) as x:
+#                data = x.read()
+#                dom = parseString(data)
+#                xmltag = dom.getElementsByTagName('d:MediaUrl')
+#                gameimages = []
+#                for elem in xmltag:
+#                    xml = elem.toxml()
+#                    imageurl = xml.replace('<d:MediaUrl m:type="Edm.String">','').replace('</d:MediaUrl>','')
+#                    if '.png' in imageurl or '.jpg' in imageurl:
+#                        gameimages.append(imageurl)
+#                        print imageurl
+#                r.imgs = gameimages
+#                return_stmt.append(r)               
 
     except WebFault as f:
         print 'WebFault'
