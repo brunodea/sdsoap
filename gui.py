@@ -16,6 +16,8 @@ class GUI(QMainWindow, Ui_MainWindow):
         self.actionExit.triggered.connect(QCoreApplication.instance().quit)
         
         self.gameList.clicked.connect(self.listClicked)
+        self.console_changed_action = None
+        self.current_games = []
 		
     def setGameName(self, gameName):
         self.gameName.setText(gameName)
