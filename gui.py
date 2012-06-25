@@ -45,6 +45,14 @@ class GUI(QMainWindow, Ui_MainWindow):
     
     def setButtonAction(self, buttonAction, arg):
         self.btSearch.clicked.connect(lambda : buttonAction(arg))
+        
+    def setConsoleChangeAction(self, func):
+        self.console_changed_action = func
+    
+    @pyqtSlot(str, name='on_cbConsoleList_currentIndexChanged')
+    def consoleChangedAction(self, arg):
+        if self.console_changed_action != None:
+            self.console_changed_action(arg,self)
     
     def listClicked(self):
         print 'Clicou na lista'
