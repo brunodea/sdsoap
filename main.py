@@ -1,27 +1,34 @@
+# -*- encoding: utf-8 -*-
 
 import sys
 from PyQt4.QtGui import QApplication
 from PyQt4 import QtCore
 from gui import GUI
+import search
 
-def fun(gui):
-    """ Acao de exemplo pro botao de busca :D
+def gamesearch(gui):
+    """ Acao para o botao de busca
         gui: referencia a interface grafica
     """
-    print 'Click test:'
-    print gui.getConsoleValue()
-    print gui.getGameValue()
+    gui.current_games = search.getGamesFromSearch(gui.getGameValue())
+    platforms = []
+    for g in gui.current_games:
+        if g.platform not in platforms:
+                platforms.append(g.platform.decode('utf-8'))
+    gui.setConsoleList(platforms)
+
+def gamelistByPlatform(platform, gui):
+    gamesnames = []
+    for g in gui.current_games:
+        if g.platform == platform:
+            gamesnames.append(g.name.decode('utf-8'))
+    gui.setGameList(gamesnames)
 
 def main():
-    # Inicia o fluxo de controle do Qt
     app = QApplication(sys.argv)
-    # Instancia uma GUI
     gui = GUI()
-    # Mostra a janela
-    list = ['Hello Kitty Online', 'Barbie Dress-Up', 'Teletubbies']
-    gui.setConsoleList(list)
-    gui.setGameList(list)
-    gui.setButtonAction(fun, gui)
+    gui.setButtonAction(gamesearch, gui)
+    gui.setConsoleChangeAction(gamelistByPlatform)
     gui.show()
     # Finaliza a execucao do Qt quando a janela e fechada
     sys.exit(app.exec_())
