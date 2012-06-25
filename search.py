@@ -19,6 +19,7 @@ from xml.dom.minidom import parseString
 
 MS_KEY = 'mjKwRazoJLnNhZyPnuBXr7u3lj/BCbj2CB4BFIzY4Rg='
 MS_URL = 'https://api.datamarket.azure.com/Bing/Search/Image'
+NUM_IMGS = 4
 
 class Game(object):
     def __init__(self,name='',platform='',price=0,gameid=''):
@@ -74,9 +75,9 @@ def getGamesFromSearch(search):
         return_stmt = []
         for r in result:
             print '-----------------------Get Image Request-------------------------'
-           
+            
             query = '\''+r.name + ' ' + r.platform +'\''
-            query = urllib.urlencode({'Query':query})
+            query = urllib.urlencode({'Query':query,'$top':NUM_IMGS})
             url = MS_URL+'?'+query
             with contextlib.closing(urllib2.urlopen(url)) as x:
                 data = x.read()
@@ -86,11 +87,9 @@ def getGamesFromSearch(search):
                 for elem in xmltag:
                     xml = elem.toxml()
                     imageurl = xml.replace('<d:MediaUrl m:type="Edm.String">','').replace('</d:MediaUrl>','')
-                    if '.png' in imageurl:
+                    if '.png' in imageurl or '.jpg' in imageurl:
                         gameimages.append(imageurl)
                         print imageurl
-                    if len(gameimages) == 5:
-                        break
                 r.imgs = gameimages
                 return_stmt.append(r)               
 
