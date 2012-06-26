@@ -11,6 +11,7 @@ from suds.client import Client
 from suds.sax.element import Element
 
 EBAY_WSDL = 'http://developer.ebay.com/webservices/finding/latest/FindingService.wsdl'
+EBAY_KEY  = 'Noneb7d1f-cc0c-4255-9e25-af37007c130'
 
 def setup_logging():
     logging.basicConfig(level=logging.INFO)
@@ -18,8 +19,9 @@ def setup_logging():
 
 def getItem(itemname):
     try:
-        opdic={'X-EBAY-SOA-OPERATION-NAME':'findItemsByKeywords','X-EBAY-SOA-SECURITY-APPNAME':'Noneb7d1f-cc0c-4255-9e25-af37007c130'}
-        client = Client(EBAY_WSDL,headers=opdic)
+        headers={'X-EBAY-SOA-OPERATION-NAME':'findItemsByKeywords', \
+                'X-EBAY-SOA-SECURITY-APPNAME': EBAY_KEY}
+        client = Client(EBAY_WSDL,headers=headers)
         keywords = itemname.replace(' ','%20')  #não pode ter espaços, no lugar tem que ter %20.      
         
         #infos para fazer uma pesquisa melhor
