@@ -23,8 +23,7 @@ def getItem(itemname):
         headers={'X-EBAY-SOA-OPERATION-NAME':'findItemsByKeywords', \
                 'X-EBAY-SOA-SECURITY-APPNAME': EBAY_KEY}
         client = Client(EBAY_WSDL,headers=headers)
-        keywords = urllib.urlencode({'nothing':itemname}).split('=')
-        keywords = keywords[1]
+        keywords = itemname
         
         #infos para fazer uma pesquisa melhor
         #no momento a pesquisa retorna trilhões de respostas.
@@ -60,7 +59,7 @@ def getItem(itemname):
 
 def main():
     setup_logging()
-    getItem('megaman x')
+    getItem('megaman+x SNES')
 
 if __name__=='__main__':
     main()
