@@ -7,19 +7,12 @@ import logging
 import traceback as tb
 import suds.metrics as metrics
 import inspect
-import urllib
-import urllib2
-import httplib
 import suds
 from suds import WebFault
 from suds.client import Client
-import urllib
-import contextlib
-from xml.dom.minidom import parseString
 
 MS_KEY = 'mjKwRazoJLnNhZyPnuBXr7u3lj/BCbj2CB4BFIzY4Rg='
 MS_URL = 'https://api.datamarket.azure.com/Bing/Search/Image'
-NUM_IMGS = 4
 
 class Game(object):
     def __init__(self,name='',platform='',price=0,gameid=''):
@@ -63,38 +56,11 @@ def getGamesFromSearch(search):
                 gameid = r.ItemID
 
                 game = Game(name=name,platform=platform,gameid=gameid)
-
+                print game
                 result.append(game)
             except Exception as e:
                pass
-        return_stmt = result
-#        passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
-#        passman.add_password(None, MS_URL,' ',MS_KEY)
-        
-#        authhandler = urllib2.HTTPBasicAuthHandler(passman)
-#        opener = urllib2.build_opener(authhandler)
-        
-#        urllib2.install_opener(opener)
-#        return_stmt = []
-#        for r in result:
-#            print '-----------------------Get Image Request-------------------------'
-            
-#            query = '\''+r.name + ' ' + r.platform +'\''
-#            query = urllib.urlencode({'Query':query,'$top':NUM_IMGS})
-#            url = MS_URL+'?'+query
-#            with contextlib.closing(urllib2.urlopen(url)) as x:
-#                data = x.read()
-#                dom = parseString(data)
-#                xmltag = dom.getElementsByTagName('d:MediaUrl')
-#                gameimages = []
-#                for elem in xmltag:
-#                    xml = elem.toxml()
-#                    imageurl = xml.replace('<d:MediaUrl m:type="Edm.String">','').replace('</d:MediaUrl>','')
-#                    if '.png' in imageurl or '.jpg' in imageurl:
-#                        gameimages.append(imageurl)
-#                        print imageurl
-#                r.imgs = gameimages
-#                return_stmt.append(r)               
+        return_stmt = result     
 
     except WebFault as f:
         print 'WebFault'
