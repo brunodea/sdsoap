@@ -63,7 +63,6 @@ def getGamesFromSearch(search):
                 gameid = r.ItemID
 
                 game = Game(name=name,platform=platform,gameid=gameid)
-                #print game
 
                 result.append(game)
             except Exception as e:
