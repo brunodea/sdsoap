@@ -6,6 +6,7 @@ sys.path.append('../')
 import logging
 import traceback as tb
 import suds.metrics as metrics
+import urllib
 from suds import WebFault
 from suds.client import Client
 from suds.sax.element import Element
@@ -22,12 +23,13 @@ def getItem(itemname):
         headers={'X-EBAY-SOA-OPERATION-NAME':'findItemsByKeywords', \
                 'X-EBAY-SOA-SECURITY-APPNAME': EBAY_KEY}
         client = Client(EBAY_WSDL,headers=headers)
-        keywords = itemname.replace(' ','%20')  #não pode ter espaços, no lugar tem que ter %20.      
+        keywords = urllib.urlencode({'nothing':itemname}).split('=')
+        keywords = keywords[1]
         
         #infos para fazer uma pesquisa melhor
         #no momento a pesquisa retorna trilhões de respostas.
         paginationinput = client.factory.create('PaginationInput')
-        postalcode = ''
+        postalcode = '22313'
         affiliate = client.factory.create('Affiliate') #para comissões
         sortordertype = client.factory.create('SortOrderType')
         sortordertype = sortordertype.BestMatch
@@ -37,10 +39,17 @@ def getItem(itemname):
         
         osts = [outputselectortype.GalleryInfo]
         
-        response = client.service.findItemsByKeywords(keywords=keywords)
-        #response = client.service.findItemsByKeywords(paginationinput,postalcode, \
-        #    affiliate,sortordertype,keywords,itemfilters,aspectfilters,osts)
-        print response
+        response = client.service.findItemsByKeywords(paginationinput,postalcode, \
+            affiliate,sortordertype,keywords,itemfilters,aspectfilters,osts)
+        for res in response:
+            if res[0] == 'searchResult':
+                if res[1]._count > 0:
+                    for r in res[1].item: 
+                        title = r.title.encode('utf-8')
+                        currentPrice = r.sellingStatus.currentPrice
+                        print title
+                        print currentPrice._currencyId + ' ' + currentPrice.value
+                    break
     
     except WebFault, f:
         print f
@@ -51,7 +60,7 @@ def getItem(itemname):
 
 def main():
     setup_logging()
-    getItem('megaman')
+    getItem('megaman x')
 
 if __name__=='__main__':
     main()
