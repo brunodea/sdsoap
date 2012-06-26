@@ -14,11 +14,22 @@ from suds.sax.element import Element
 EBAY_WSDL = 'http://developer.ebay.com/webservices/finding/latest/FindingService.wsdl'
 EBAY_KEY  = 'Noneb7d1f-cc0c-4255-9e25-af37007c130'
 
+class EBayItem(object):
+    def __init__(self,currency,price,link_ebay):
+        self.currency = currency
+        self.price = price
+        self.link_ebay = link_ebay
+        
+    def __str__(self):
+        return self.currency + ' ' + self.price + '\n' + self.link_ebay
+
+
 def setup_logging():
     logging.basicConfig(level=logging.INFO)
     logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
-def getItem(itemname):
+def getEBayItem(itemname):
+    items = []
     try:
         headers={'X-EBAY-SOA-OPERATION-NAME':'findItemsByKeywords', \
                 'X-EBAY-SOA-SECURITY-APPNAME': EBAY_KEY}
@@ -43,11 +54,12 @@ def getItem(itemname):
         for res in response:
             if res[0] == 'searchResult':
                 if res[1]._count > 0:
-                    for r in res[1].item: 
-                        title = r.title.encode('utf-8')
+                    for r in res[1].item:
                         currentPrice = r.sellingStatus.currentPrice
-                        print title
-                        print currentPrice._currencyId + ' ' + currentPrice.value
+                        ebayitem = EBayItem(currentPrice._currencyId,currentPrice.value,r.viewItemURL)
+                        items.append(ebayitem)
+                        print ebayitem 
+                        print '---------------------'
                     break
     
     except WebFault, f:
@@ -59,7 +71,7 @@ def getItem(itemname):
 
 def main():
     setup_logging()
-    getItem('megaman+x SNES')
+    getEBayItem('\"megaman x\" SNES')
 
 if __name__=='__main__':
     main()
