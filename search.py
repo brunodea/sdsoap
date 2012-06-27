@@ -8,6 +8,7 @@ import traceback as tb
 import suds.metrics as metrics
 import inspect
 import suds
+import ebay
 from suds import WebFault
 from suds.client import Client
 
@@ -18,12 +19,12 @@ class Game(object):
     def __init__(self,name='',platform='',price=0,gameid=''):
         self.name = name
         self.platform = platform
-        self.price = price
         self.gameid = gameid
-        self.imgs = []
+        self.ebay = []
 
     def __str__(self):
-        return 'Jogo: %s\nPlataforma: %s\nPreco: %d\nID: %s\n' % (self.name,self.platform,self.price,self.gameid)
+        return 'Jogo: %s\nPlataforma: %s\nID: %s\n%s' % (self.name,self.platform, \
+            self.gameid,'\n'.join(map(str,self.ebay)))
 
 def setup_logging():
     logging.basicConfig(level=logging.INFO)
@@ -37,15 +38,20 @@ def getGamePlatform(display_string):
 
     return res
 
-def getGamesFromSearch(search):
+def getGamesFromSearch(search,num_ebay):
     result = []
+    return_stmt = []
     try:
-        print 'Busca por jogo %s.' % (search)
+        print 'Buscando no GameCompare por jogo %s.' % (search)
         url = "http://www.gamecompare.com/GameCompare.asmx?WSDL"
         client = Client(url)
         print 'Iniciando busca...'
         response = client.service.Search('SourceControl', search)
         print 'Resultados da busca:'
+
+        if response.colResults == "":
+            return return_stmt
+
         responses = response.colResults.SearchResult
 
         for r in responses:
@@ -56,7 +62,13 @@ def getGamesFromSearch(search):
                 gameid = r.ItemID
 
                 game = Game(name=name,platform=platform,gameid=gameid)
+                print 'Buscando no ebay...'
+                game.ebay = ebay.getEBayItems('%s %s'%(name,platform),num_ebay)
+                if len(game.ebay) == 0:
+                    game.ebay.append(ebay.EbayItem('None','USD',0,'None'))
+                
                 print game
+                print 'pronto.'
                 result.append(game)
             except Exception as e:
                pass
@@ -70,11 +82,12 @@ def getGamesFromSearch(search):
         print 'Exception'
         print e
 
+    print 'Fim da busca no GameCompare.'
     return return_stmt
 
 def main():
     setup_logging()
-    getGamesFromSearch('megaman')
+    getGamesFromSearch('megaman',3)
 
 
 
