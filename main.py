@@ -3,7 +3,7 @@
 import sys
 from PyQt4.QtGui import QApplication
 from PyQt4 import QtCore
-from gui_mainwindow3 import GUIv3
+from gui_v3 import GUIv3
 import search
 import getcover
 import ebay
