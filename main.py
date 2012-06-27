@@ -3,14 +3,14 @@
 import sys
 from PyQt4.QtGui import QApplication
 from PyQt4 import QtCore
-from gui_mainwindow2 import MainWindow2
+from gui_mainwindow3 import GUIv3
 import search
 import getcover
 import ebay
 
 
 APP = QApplication(sys.argv)
-THE_GUI = MainWindow2()
+THE_GUI = GUIv3()
 IMAGE_PATH = ''
 
 def gamesearch(clicked):
@@ -63,11 +63,12 @@ def adjustCurrentEbay(new_list_widget_item,last_list_widget_item):
             break
 
 def main():
-    THE_GUI.init_ui()
+    #THE_GUI.init_ui()
     THE_GUI.setSearchButtonCallback(gamesearch)
     THE_GUI.setPlatformItemChangedCallback(gamelistByPlatform)
     THE_GUI.setGameListItemChangedCallback(adjustEbayList)
     THE_GUI.setEbayListItemChangedCallback(adjustCurrentEbay)
+    THE_GUI.show()
     
     sys.exit(APP.exec_())
 
