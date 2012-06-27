@@ -15,20 +15,21 @@ EBAY_WSDL = 'http://developer.ebay.com/webservices/finding/latest/FindingService
 EBAY_KEY  = 'Noneb7d1f-cc0c-4255-9e25-af37007c130'
 
 class EBayItem(object):
-    def __init__(self,currency,price,link_ebay):
+    def __init__(self,title,currency,price,link_ebay):
+        self.title = title
         self.currency = currency
         self.price = price
         self.link_ebay = link_ebay
         
     def __str__(self):
-        return self.currency + ' ' + self.price + '\n' + self.link_ebay
+        return self.currency + ' ' + self.price + ' ' + self.title + '\n' + self.link_ebay
 
 
 def setup_logging():
     logging.basicConfig(level=logging.INFO)
     logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
-def getEBayItem(itemname):
+def getEBayItems(itemname,num_res_items):
     items = []
     try:
         headers={'X-EBAY-SOA-OPERATION-NAME':'findItemsByKeywords', \
@@ -54,12 +55,14 @@ def getEBayItem(itemname):
         for res in response:
             if res[0] == 'searchResult':
                 if res[1]._count > 0:
+                    i = 0
                     for r in res[1].item:
                         currentPrice = r.sellingStatus.currentPrice
-                        ebayitem = EBayItem(currentPrice._currencyId,currentPrice.value,r.viewItemURL)
+                        ebayitem = EBayItem(r.title,currentPrice._currencyId,currentPrice.value,r.viewItemURL)
                         items.append(ebayitem)
-                        print ebayitem 
-                        print '---------------------'
+                        i = i + 1
+                        if i == num_res_items:
+                            break
                     break
     
     except WebFault, f:
@@ -68,10 +71,11 @@ def getEBayItem(itemname):
     except Exception, e:
         print e
         tb.print_exc()
+    return items
 
 def main():
     setup_logging()
-    getEBayItem('\"megaman x\" SNES')
+    getEBayItem('\"megaman x\" SNES',5)
 
 if __name__=='__main__':
     main()
