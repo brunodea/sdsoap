@@ -8,7 +8,6 @@ import traceback as tb
 import suds.metrics as metrics
 import inspect
 import suds
-import ebay
 from suds import WebFault
 from suds.client import Client
 
@@ -38,7 +37,7 @@ def getGamePlatform(display_string):
 
     return res
 
-def getGamesFromSearch(search,num_ebay):
+def getGamesFromSearch(search):
     result = []
     return_stmt = []
     try:
@@ -62,13 +61,9 @@ def getGamesFromSearch(search,num_ebay):
                 gameid = r.ItemID
 
                 game = Game(name=name,platform=platform,gameid=gameid)
-                print 'Buscando no ebay...'
-                game.ebay = ebay.getEBayItems('%s %s'%(name,platform),num_ebay)
-                if len(game.ebay) == 0:
-                    game.ebay.append(ebay.EbayItem('None','USD',0,'None'))
                 
                 print game
-                print 'pronto.'
+                print '------------------------'
                 result.append(game)
             except Exception as e:
                pass

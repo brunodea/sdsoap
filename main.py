@@ -6,6 +6,7 @@ from PyQt4 import QtCore
 from gui_mainwindow2 import MainWindow2
 import search
 import getcover
+import ebay
 
 
 APP = QApplication(sys.argv)
@@ -17,7 +18,7 @@ def gamesearch(clicked):
         gui: referencia a interface grafica
     """
     THE_GUI.statusBar().showMessage('Buscando...')
-    THE_GUI.current_games = search.getGamesFromSearch(THE_GUI.searchText(),THE_GUI.numebay())
+    THE_GUI.current_games = search.getGamesFromSearch(THE_GUI.searchText())
     platforms = []
     for g in THE_GUI.current_games:
         if g.platform not in platforms:
@@ -38,7 +39,10 @@ def adjustEbayList(new_list_widget_item,last_list_widget_item):
         return
     
     for g in THE_GUI.current_games:
-        if g.name == new_list_widget_item.text():        
+        if g.name == new_list_widget_item.text():
+            print 'Buscando no eBay'
+            g.ebay = ebay.getEBayItems('%s %s'%(g.name,g.platform),THE_GUI.numebay())
+            print 'Busca no eBay finalizada.'
             THE_GUI.setEbayList([x.title for x in g.ebay])
             THE_GUI.current_game = g
             THE_GUI.statusBar().showMessage('Baixando imagem...')

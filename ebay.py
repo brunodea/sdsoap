@@ -59,6 +59,7 @@ def getEBayItems(itemname,num_res_items):
                     for r in res[1].item:
                         currentPrice = r.sellingStatus.currentPrice
                         ebayitem = EBayItem(r.title,currentPrice._currencyId,currentPrice.value,r.viewItemURL)
+                        print ebayitem
                         items.append(ebayitem)
                         i = i + 1
                         if i == num_res_items:
