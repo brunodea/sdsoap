@@ -25,6 +25,9 @@ class Game(object):
         return 'Jogo: %s\nPlataforma: %s\nID: %s\n%s' % (self.name,self.platform, \
             self.gameid,'\n'.join(map(str,self.ebay)))
     def __eq__(self,game):
+        if game == None:
+            return False
+    
         return self.name == game.name and self.platform == game.platform
 
 def setup_logging():
