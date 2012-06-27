@@ -24,6 +24,8 @@ class Game(object):
     def __str__(self):
         return 'Jogo: %s\nPlataforma: %s\nID: %s\n%s' % (self.name,self.platform, \
             self.gameid,'\n'.join(map(str,self.ebay)))
+    def __eq__(self,game):
+        return self.name == game.name and self.platform == game.platform
 
 def setup_logging():
     logging.basicConfig(level=logging.INFO)
