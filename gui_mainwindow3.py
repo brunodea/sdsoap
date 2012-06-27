@@ -40,6 +40,9 @@ class GUIv3(QtGui.QMainWindow, Ui_MainWindow):
     def setPlatformItemChangedCallback(self, callback_func):
         self.connect(self.platform_combobox,QtCore.SIGNAL("currentIndexChanged(const QString &)"),callback_func)
     
+    def setNumResEbayChangedCallback(self, callback_func):
+        self.connect(self.num_ebay_spinbox, QtCore.SIGNAL("valueChanged(int)"),callback_func)
+    
     def searchText(self):
         return self.search_line_edit.text()
         
