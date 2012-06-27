@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'gui2.ui'
 #
-# Created: Wed Jun 27 15:20:46 2012
+# Created: Wed Jun 27 19:17:21 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -52,9 +52,9 @@ class Ui_MainWindow(object):
         self.center_image_label.setPixmap(QtGui.QPixmap(_fromUtf8("imgs/no_image.png")))
         self.center_image_label.setObjectName(_fromUtf8("center_image_label"))
         self.game_name_label = QtGui.QLabel(self.centralwidget)
-        self.game_name_label.setGeometry(QtCore.QRect(460, 350, 591, 281))
-        self.game_name_label.setMinimumSize(QtCore.QSize(400, 0))
-        self.game_name_label.setMaximumSize(QtCore.QSize(600, 16777215))
+        self.game_name_label.setGeometry(QtCore.QRect(430, 350, 350, 281))
+        self.game_name_label.setMinimumSize(QtCore.QSize(200, 0))
+        self.game_name_label.setMaximumSize(QtCore.QSize(350, 16777215))
         font = QtGui.QFont()
         font.setPointSize(16)
         font.setBold(True)
