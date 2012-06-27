@@ -62,6 +62,7 @@ class GUIv3(QtGui.QMainWindow, Ui_MainWindow):
                     (text, self.current_ebay.currency, self.current_ebay.price, \
                      self.current_ebay.link_ebay)
             self.game_name_label.setText('<qt>%s</qt>' % text)
+            self.game_name_label.setOpenExternalLinks(True)
         else:
             self.game_name_label.setText('Nenhum jogo selecionado')
             self.setCentraImage(None)
