@@ -14,11 +14,7 @@ APP = QApplication(sys.argv)
 THE_GUI = GUIv3()
 IMAGE_PATH = ''
 
-def gamesearch(clicked):
-    """ Acao para o botao de busca
-        gui: referencia a interface grafica
-    """
-    THE_GUI.statusBar().showMessage('Buscando...')
+def gamesearch_thread():
     THE_GUI.current_games = search.getGamesFromSearch(THE_GUI.searchText())
     platforms = []
     for g in THE_GUI.current_games:
@@ -26,6 +22,12 @@ def gamesearch(clicked):
                 platforms.append(g.platform.decode('utf-8'))
     THE_GUI.setPlatformList(platforms)
     THE_GUI.statusBar().showMessage('Busca finalizada!')
+
+def gamesearch(clicked):
+    THE_GUI.statusBar().showMessage('Buscando...')
+    th = Thread(target=gamesearch_thread())
+    th.start()
+
 
 def gamelistByPlatform(platform):
     gamesnames = []
