@@ -1,18 +1,24 @@
 import urllib
 import re
 
-def downloadcover (id,covername):
-    #id is provided by the web service
-    id='1859458'
+def downloadcover (id_,path):
     #build de url
-    url='http://www.gamecompare.com/product.aspx?productid='+id
+    url='http://www.gamecompare.com/product.aspx?productid='+id_
     #print url
     #open the link
     f = urllib.urlopen(url)
     #get url of the cover
     urlcover = re.search('<div class="productimage"><img src=\"(.*?)\" alt=', f.read()).group(1)
     #downlaod de cover
-    print 'Downloading: ' + urlcover
-    urllib.urlretrieve(urlcover, covername+".jpg")    
+    print 'Baixando Capa do Jogo: ' + urlcover
     
-downloadcover('1859458','covertemp')
+    urlsplitted = urlcover.split('.')
+    extension = urlsplitted[len(urlsplitted)-1]
+    if extension == '.gif':
+        return None
+    
+    path = path + '.' + extension
+
+    urllib.urlretrieve(urlcover, path)
+    
+    return path
