@@ -7,6 +7,7 @@ from gui_mainwindow3 import GUIv3
 import search
 import getcover
 import ebay
+from threading import Thread
 
 
 APP = QApplication(sys.argv)
@@ -62,12 +63,16 @@ def adjustCurrentEbay(new_list_widget_item,last_list_widget_item):
             THE_GUI.adjustCentralStuff()
             break
 
-def updateCurrentEbay(spinbox_item):
-    print 'Buscando no eBay'
+def updateCurrentEbay_thread():
     g = THE_GUI.current_game
     THE_GUI.current_game.ebay = ebay.getEBayItems('%s %s'%(g.name,g.platform),THE_GUI.numebay())
     THE_GUI.setEbayList([x.title for x in THE_GUI.current_game.ebay])
     print 'Busca no eBay finalizada.'
+
+def updateCurrentEbay(spinbox_item):
+    print 'Buscando no eBay'
+    th = Thread(target=updateCurrentEbay_thread)
+    th.start()
 
 def main():
     #THE_GUI.init_ui()
