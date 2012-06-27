@@ -5,17 +5,19 @@ from PyQt4.QtGui import QApplication
 from PyQt4 import QtCore
 from gui_mainwindow2 import MainWindow2
 import search
+import getcover
 
 
 APP = QApplication(sys.argv)
 THE_GUI = MainWindow2()
+IMAGE_PATH = ''
 
 def gamesearch(clicked):
     """ Acao para o botao de busca
         gui: referencia a interface grafica
     """
     THE_GUI.statusBar().showMessage('Buscando...')
-    THE_GUI.current_games = search.getGamesFromSearch(THE_GUI.searchText(),3)
+    THE_GUI.current_games = search.getGamesFromSearch(THE_GUI.searchText(),THE_GUI.numebay())
     platforms = []
     for g in THE_GUI.current_games:
         if g.platform not in platforms:
@@ -32,10 +34,16 @@ def gamelistByPlatform(platform):
 
 def adjustEbayList(new_list_widget_item,last_list_widget_item):
     THE_GUI.current_game = None
+    if new_list_widget_item == None:
+        return
+    
     for g in THE_GUI.current_games:
         if g.name == new_list_widget_item.text():        
             THE_GUI.setEbayList([x.title for x in g.ebay])
             THE_GUI.current_game = g
+            THE_GUI.statusBar().showMessage('Baixando imagem...')
+            THE_GUI.setCentralImage(getcover.downloadcover(g.gameid,'imgs/cover'))    
+            THE_GUI.statusBar().showMessage('Imagem baixada!')
             THE_GUI.adjustCentralStuff()
             break
 

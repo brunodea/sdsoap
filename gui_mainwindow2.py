@@ -14,6 +14,7 @@ class MainWindow2(QtGui.QMainWindow):
     def __init__(self):
         super(MainWindow2, self).__init__()
         self.search_button = None
+        self.num_ebay_spinbox = None
         self.games_listview = None
         self.ebay_listview = None
         self.platform_combobox = None
@@ -23,11 +24,15 @@ class MainWindow2(QtGui.QMainWindow):
         self.search_line_edit = None
         self.to_ebay_button = None
         self.game_name_label = None
+        self.center_image_label = None
         
     def init_ui(self):
         self.search_button = QtGui.QPushButton('Buscar')
         self.search_line_edit = QtGui.QLineEdit()
         search_label = QtGui.QLabel('Buscar')
+        self.num_ebay_spinbox = QtGui.QSpinBox()
+        self.num_ebay_spinbox.setMaximum(100)
+        self.num_ebay_spinbox.setMinimum(1)
         
         search_layout = QtGui.QHBoxLayout()
         search_layout.addWidget(search_label, QtCore.Qt.AlignRight)
@@ -49,12 +54,12 @@ class MainWindow2(QtGui.QMainWindow):
         left_dock = QtGui.QDockWidget('Plataformas/Jogos')
         left_dock.setWidget(left_aux)
 
-        self.addDockWidget(QtCore.Qt.LeftDockWidgetArea,left_dock)
+        self.addDockWidget(QtCore.Qt.TopDockWidgetArea,left_dock)
         
         no_img_pixmap = QtGui.QPixmap('imgs/no_image.png')
                 
-        center_image_label = QtGui.QLabel()
-        center_image_label.setPixmap(no_img_pixmap)
+        self.center_image_label = QtGui.QLabel()
+        self.center_image_label.setPixmap(no_img_pixmap)
         
         self.game_name_label = QtGui.QLabel('Nenhum Jogo Selecionado')
         
@@ -64,6 +69,8 @@ class MainWindow2(QtGui.QMainWindow):
         self.to_ebay_button.clicked.connect(self.goToCurrentEbaySite)
         
         right_vbox_layout = QtGui.QVBoxLayout()
+        right_vbox_layout.addWidget(QtGui.QLabel(_fromUtf8('Número máximo de retornos no ebay')))
+        right_vbox_layout.addWidget(self.num_ebay_spinbox, QtCore.Qt.AlignRight)
         right_vbox_layout.addWidget(self.ebay_listview)
         right_vbox_layout.addWidget(self.to_ebay_button)
                 
@@ -72,10 +79,10 @@ class MainWindow2(QtGui.QMainWindow):
         right_dock = QtGui.QDockWidget('Jogo no eBay')
         right_dock.setWidget(right_aux)
         
-        self.addDockWidget(QtCore.Qt.RightDockWidgetArea,right_dock)
+        self.addDockWidget(QtCore.Qt.BottomDockWidgetArea,right_dock)
         
         center_hbox_layout = QtGui.QHBoxLayout()
-        center_hbox_layout.addWidget(center_image_label, QtCore.Qt.AlignCenter)
+        center_hbox_layout.addWidget(self.center_image_label, QtCore.Qt.AlignCenter)
         center_hbox_layout.addWidget(self.game_name_label, QtCore.Qt.AlignCenter)
 
         final_layout = QtGui.QVBoxLayout()
@@ -132,10 +139,21 @@ class MainWindow2(QtGui.QMainWindow):
                     (text, self.current_ebay.currency, self.current_ebay.price, \
                      self.current_ebay.link_ebay)
             self.game_name_label.setText('<qt>%s</qt>' % text)
+        else:
+            self.game_name_label.setText('Nenhum jogo selecionado')
+            self.setCentraImage(None)
     
+    def setCentralImage(self,image_path):
+        pix = None
+        if image_path != None:
+            pix = QtGui.QPixmap(image_path)
+        if pix != None:
+            self.center_image_label.setPixmap(pix)
+        else:
+            pix = QtGui.QPixmap('imgs/no_image.png')
+            self.center_image_label.setPixmap(pix)
     
-    
-    
-    
+    def numebay(self):
+        return self.num_ebay_spinbox.value()
         
         
