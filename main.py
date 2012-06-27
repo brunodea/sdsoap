@@ -53,7 +53,7 @@ def adjustEbayList(new_list_widget_item,last_list_widget_item):
 
 def adjustCurrentEbay(new_list_widget_item,last_list_widget_item):
     THE_GUI.current_ebay = None
-    if THE_GUI.current_game == None:
+    if THE_GUI.current_game == None or new_list_widget_item == None:
         return
     
     for e in THE_GUI.current_game.ebay:
@@ -62,12 +62,20 @@ def adjustCurrentEbay(new_list_widget_item,last_list_widget_item):
             THE_GUI.adjustCentralStuff()
             break
 
+def updateCurrentEbay(spinbox_item):
+    print 'Buscando no eBay'
+    g = THE_GUI.current_game
+    THE_GUI.current_game.ebay = ebay.getEBayItems('%s %s'%(g.name,g.platform),THE_GUI.numebay())
+    THE_GUI.setEbayList([x.title for x in THE_GUI.current_game.ebay])
+    print 'Busca no eBay finalizada.'
+
 def main():
     #THE_GUI.init_ui()
     THE_GUI.setSearchButtonCallback(gamesearch)
     THE_GUI.setPlatformItemChangedCallback(gamelistByPlatform)
     THE_GUI.setGameListItemChangedCallback(adjustEbayList)
     THE_GUI.setEbayListItemChangedCallback(adjustCurrentEbay)
+    THE_GUI.setNumResEbayChangedCallback(updateCurrentEbay)
     THE_GUI.show()
     
     sys.exit(APP.exec_())
