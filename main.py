@@ -14,6 +14,19 @@ APP = QApplication(sys.argv)
 THE_GUI = GUIv3()
 IMAGE_PATH = ''
 
+class DownloadImage(QtCore.QObject):
+    finished = QtCore.pyqtSignal()
+    thread = None
+    def do(self):
+        THE_GUI.statusBar().showMessage('Baixando imagem...')
+        IMAGE_PATH = getcover.downloadcover(THE_GUI.current_game.gameid,'imgs/cover')
+        THE_GUI.statusBar().showMessage('Imagem baixada!')
+        self.finished.emit()
+    
+    def download(self):
+        self.thread = Thread(target=self.do)
+        self.thread.start()
+
 def gamesearch_thread():
     THE_GUI.current_games = search.getGamesFromSearch(THE_GUI.searchText())
     platforms = []
@@ -36,34 +49,29 @@ def gamelistByPlatform(platform):
             gamesnames.append(g.name.decode('utf-8'))
     THE_GUI.setGameList(gamesnames)
 
-def adjustEbayList(new_list_widget_item,last_list_widget_item):
-    THE_GUI.current_game = None
-    if new_list_widget_item == None:
-        return
-    
-    for g in THE_GUI.current_games:
-        if g.name == new_list_widget_item.text():
-            print 'Buscando no eBay'
-            g.ebay = ebay.getEBayItems('%s %s'%(g.name,g.platform),THE_GUI.numebay())
-            print 'Busca no eBay finalizada.'
-            THE_GUI.setEbayList([x.title for x in g.ebay])
-            THE_GUI.current_game = g
-            THE_GUI.statusBar().showMessage('Baixando imagem...')
-            THE_GUI.setCentralImage(getcover.downloadcover(g.gameid,'imgs/cover'))    
-            THE_GUI.statusBar().showMessage('Imagem baixada!')
-            THE_GUI.adjustCentralStuff()
-            break
+def adjustEbayList():
+    print 'Buscando no eBay'
+    THE_GUI.current_game.ebay = ebay.getEBayItems('%s %s'%(THE_GUI.current_game.name,THE_GUI.current_game.platform),THE_GUI.numebay())
+    print 'Busca no eBay finalizada.'
+    THE_GUI.setEbayList([x.title for x in g.ebay])
+    THE_GUI.adjustCentralStuff()
 
-def adjustCurrentEbay(new_list_widget_item,last_list_widget_item):
+def adjustCentralInfo(new_list_widget_item,last_list_widget_item):
     THE_GUI.current_ebay = None
     if THE_GUI.current_game == None or new_list_widget_item == None:
         return
-    
+    ebaygamename = new_list_widget_item.text()
+
     for e in THE_GUI.current_game.ebay:
-        if e.title == new_list_widget_item.text():
+        if e.title == ebaygamename:
             THE_GUI.current_ebay = e
             THE_GUI.adjustCentralStuff()
             break
+
+def adjustCentralImage():
+    print 'IMAGE_PATH ' + IMAGE_PATH
+    THE_GUI.setCentralImage(IMAGE_PATH)
+
 
 def updateCurrentEbay_thread():
     g = THE_GUI.current_game
@@ -76,12 +84,29 @@ def updateCurrentEbay(spinbox_item):
     th = Thread(target=updateCurrentEbay_thread)
     th.start()
 
+def adjustCurrentEbay(new_list_widget_item,last_list_widget_item):
+    THE_GUI.current_ebay = None
+    if new_list_widget_item == None:
+        return
+    gamename = new_list_widget_item.text()
+    for g in THE_GUI.current_games:
+        if g.name == new_list_widget_item.text():
+            THE_GUI.current_game = g
+            break
+    th = DownloadImage()
+#    th.finished.connect()
+    th.download()
+    th.thread.join()
+    adjustCentralImage()
+    
+    updateCurrentEbay(None)
+    
 def main():
     #THE_GUI.init_ui()
     THE_GUI.setSearchButtonCallback(gamesearch)
     THE_GUI.setPlatformItemChangedCallback(gamelistByPlatform)
-    THE_GUI.setGameListItemChangedCallback(adjustEbayList)
-    THE_GUI.setEbayListItemChangedCallback(adjustCurrentEbay)
+    THE_GUI.setGameListItemChangedCallback(adjustCurrentEbay)
+    THE_GUI.setEbayListItemChangedCallback(adjustCentralInfo)
     THE_GUI.setNumResEbayChangedCallback(updateCurrentEbay)
     THE_GUI.show()
     
