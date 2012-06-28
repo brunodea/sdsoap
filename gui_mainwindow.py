@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 
+# Form implementation generated from reading ui file 'gui.ui'
+#
+# Created: Thu Jun 28 19:08:50 2012
+#      by: PyQt4 UI code generator 4.9.4
+#
+# WARNING! All changes made in this file will be lost!
+
 from PyQt4 import QtCore, QtGui
 
 try:
@@ -99,7 +106,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.games_listview)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 20))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
@@ -110,7 +117,7 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
+        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Sistemas Distribuídos - T4", None, QtGui.QApplication.UnicodeUTF8))
         self.label_4.setText(QtGui.QApplication.translate("MainWindow", "eBay", None, QtGui.QApplication.UnicodeUTF8))
         self.label_5.setText(QtGui.QApplication.translate("MainWindow", "Numero maximo de retornos", None, QtGui.QApplication.UnicodeUTF8))
         self.game_name_label.setText(QtGui.QApplication.translate("MainWindow", "Nenhum jogo selecionado.", None, QtGui.QApplication.UnicodeUTF8))
