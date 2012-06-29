@@ -67,10 +67,14 @@ class GUIv3(QtGui.QMainWindow, Ui_MainWindow):
     
     def setCentralImage(self,image_path):
         pix = None
-        if image_path != None:
-            pix = QtGui.QPixmap(image_path)
-            if pix != None:
-                pix = pix.scaled(410,308,aspectRatioMode=QtCore.Qt.KeepAspectRatio)
+        if image_path != None and image_path != '':
+                pix = QtGui.QPixmap(image_path)
+                
+                if pix != None:
+                    if pix.isNull():
+                        pix = None
+                    else:
+                        pix = pix.scaled(410,308,aspectRatioMode=QtCore.Qt.KeepAspectRatio)
         if pix == None:
             pix = QtGui.QPixmap('imgs/no_image.png')
         if pix != None:          

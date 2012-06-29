@@ -16,7 +16,7 @@ def downloadcover (id_,path):
     extension = urlsplitted[len(urlsplitted)-1]
     if extension == '.gif':
         return None
-    
+
     path = path + '.' + extension
 
     urllib.urlretrieve(urlcover, path)
