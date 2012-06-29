@@ -43,6 +43,9 @@ def gamesearch_thread():
     THE_GUI.setPlatformList(platforms)
 
 def gamesearch(clicked):
+    THE_GUI.current_game = None
+    THE_GUI.adjustCentralStuff()
+    THE_GUI.setCentralImage(None)
     THE_GUI.statusBar().showMessage('Buscando no GameCompare...')
     GAME_SEARCH_THREAD.finished.connect(gamesearch_finished)
     GAME_SEARCH_THREAD.work = gamesearch_thread
