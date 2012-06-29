@@ -87,9 +87,10 @@ def adjustEbayList(new_list_widget_item,last_list_widget_item):
     
     for g in THE_GUI.current_games:
         if g.name == new_list_widget_item.text():
-            print 'Buscando no eBay'
-            g.ebay = ebay.getEBayItems('%s %s'%(g.name,g.platform),THE_GUI.numebay())
-            print 'Busca no eBay finalizada.'
+            if len(g.ebay) != THE_GUI.numebay():
+                print 'Buscando no eBay'
+                g.ebay = ebay.getEBayItems('%s %s'%(g.name,g.platform),THE_GUI.numebay())
+                print 'Busca no eBay finalizada.'
             THE_GUI.current_game = g
             THE_GUI.setEbayList([x.title for x in g.ebay])
             break
