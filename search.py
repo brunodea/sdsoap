@@ -69,7 +69,8 @@ def getGamesFromSearch(search):
                 
                 print game
                 print '------------------------'
-                result.append(game)
+                if not game in result:
+                    result.append(game)
             except Exception as e:
                pass
         return_stmt = result     
