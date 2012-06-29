@@ -68,7 +68,7 @@ class GUIv3(QtGui.QMainWindow, Ui_MainWindow):
             self.game_name_label.setOpenExternalLinks(True)
         else:
             self.game_name_label.setText('Nenhum jogo selecionado')
-            self.setCentraImage(None)
+            self.setCentralImage(None)
     
     def setCentralImage(self,image_path):
         pix = None
