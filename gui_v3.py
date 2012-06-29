@@ -5,11 +5,6 @@ import sys
 import webbrowser
 from PyQt4 import QtCore, QtGui
 from gui_mainwindow import Ui_MainWindow
-
-#try:
-#    _fromUtf8 = QtCore.QString.fromUtf8
-#except AttributeError:
-#    _fromUtf8 = lambda s: s
     
 class GUIv3(QtGui.QMainWindow, Ui_MainWindow):
     def __init__(self):
