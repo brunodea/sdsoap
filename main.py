@@ -32,9 +32,12 @@ GAME_SEARCH_THREAD = Worker(THE_GUI)
 UPDATE_CURRENT_EBAY = Worker(THE_GUI)
 
 def gamesearch_finished():
+    global THE_GUI
+    GAME_SEARCH_THREAD.quit()
     THE_GUI.statusBar().showMessage('Busca no GameCompare finalizada!')
 
 def gamesearch_thread():
+    global THE_GUI
     THE_GUI.current_games = search.getGamesFromSearch(THE_GUI.searchText())
     platforms = []
     for g in THE_GUI.current_games:
@@ -43,6 +46,9 @@ def gamesearch_thread():
     THE_GUI.setPlatformList(platforms)
 
 def gamesearch(clicked):
+    global THE_GUI
+    global GAME_SEARCH_THREAD
+    GAME_SEARCH_THREAD.quit()
     THE_GUI.current_game = None
     THE_GUI.adjustCentralStuff()
     THE_GUI.setCentralImage(None)
@@ -54,6 +60,7 @@ def gamesearch(clicked):
 
 
 def gamelistByPlatform(platform):
+    global THE_GUI
     gamesnames = []
     for g in THE_GUI.current_games:
         if g.platform == platform:
@@ -61,7 +68,9 @@ def gamelistByPlatform(platform):
     THE_GUI.setGameList(gamesnames)
 
 def downloadImage_finished():
+    global THE_GUI
     global IMAGE_PATH
+    IMAGE_THREAD.quit()
     THE_GUI.statusBar().showMessage('Imagem baixada!')
     THE_GUI.adjustCentralStuff()
     THE_GUI.setCentralImage(IMAGE_PATH)
@@ -71,6 +80,10 @@ def downloadImage(gameid):
     IMAGE_PATH = getcover.downloadcover(gameid,'imgs/cover')
     
 def adjustEbayList_finished():
+    global THE_GUI
+    global IMAGE_THREAD
+    EBAY_LIST_THREAD.quit()
+    IMAGE_THREAD.quit()
     THE_GUI.statusBar().showMessage('Buscando no eBay finalizada!')
     if THE_GUI.current_game == None:
         return
@@ -81,6 +94,7 @@ def adjustEbayList_finished():
     IMAGE_THREAD.start()
 
 def adjustEbayList(new_list_widget_item,last_list_widget_item):
+    global THE_GUI
     THE_GUI.current_game = None
     if new_list_widget_item == None:
         return
@@ -96,9 +110,12 @@ def adjustEbayList(new_list_widget_item,last_list_widget_item):
             break
 
 def adjustEbayList_aux(new_list_widget_item,last_list_widget_item):
+    global THE_GUI
+    global EBAY_LIST_THREAD
     THE_GUI.current_game = None
     THE_GUI.adjustCentralStuff()
     THE_GUI.setCentralImage(None)
+    EBAY_LIST_THREAD.quit()
     EBAY_LIST_THREAD.finished.connect(adjustEbayList_finished)
     EBAY_LIST_THREAD.args = (new_list_widget_item,last_list_widget_item)
     EBAY_LIST_THREAD.work = adjustEbayList
@@ -106,6 +123,7 @@ def adjustEbayList_aux(new_list_widget_item,last_list_widget_item):
     EBAY_LIST_THREAD.start()
 
 def adjustCurrentEbay(new_list_widget_item,last_list_widget_item):
+    global THE_GUI
     THE_GUI.current_ebay = None
     if THE_GUI.current_game == None or new_list_widget_item == None:
         return
@@ -117,9 +135,12 @@ def adjustCurrentEbay(new_list_widget_item,last_list_widget_item):
             break
 
 def updateCurrentEbay_finished():
+    global THE_GUI
+    global UPDATE_CURRENT_EBAY
     THE_GUI.statusBar().showMessage('Busca no eBay finalizada!')
 
 def updateCurrentEbay_thread():
+    global THE_GUI
     g = THE_GUI.current_game
     print 'Buscando no eBay'
     THE_GUI.current_game.ebay = ebay.getEBayItems('%s %s'%(g.name,g.platform),THE_GUI.numebay())
@@ -127,6 +148,9 @@ def updateCurrentEbay_thread():
     print 'Busca no eBay finalizada.'
 
 def updateCurrentEbay(spinbox_item):
+    global THE_GUI
+    global UPDATE_CURRENT_EBAY
+    UPDATE_CURRENT_EBAY.quit()
     UPDATE_CURRENT_EBAY.work = updateCurrentEbay_thread
     UPDATE_CURRENT_EBAY.args = ()
     UPDATE_CURRENT_EBAY.finished.connect(updateCurrentEbay_finished)
@@ -134,6 +158,7 @@ def updateCurrentEbay(spinbox_item):
     UPDATE_CURRENT_EBAY.start()
 
 def main():
+    global THE_GUI
     THE_GUI.setSearchButtonCallback(gamesearch)
     THE_GUI.setPlatformItemChangedCallback(gamelistByPlatform)
     THE_GUI.setGameListItemChangedCallback(adjustEbayList_aux)
