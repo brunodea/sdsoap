@@ -60,6 +60,7 @@ def gamelistByPlatform(platform):
 def downloadImage_finished():
     global IMAGE_PATH
     THE_GUI.statusBar().showMessage('Imagem baixada!')
+    THE_GUI.adjustCentralStuff()
     THE_GUI.setCentralImage(IMAGE_PATH)
 
 def downloadImage(gameid):
