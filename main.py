@@ -92,6 +92,9 @@ def adjustEbayList(new_list_widget_item,last_list_widget_item):
             break
 
 def adjustEbayList_aux(new_list_widget_item,last_list_widget_item):
+    THE_GUI.current_game = None
+    THE_GUI.adjustCentralStuff()
+    THE_GUI.setCentralImage(None)
     EBAY_LIST_THREAD.finished.connect(adjustEbayList_finished)
     EBAY_LIST_THREAD.args = (new_list_widget_item,last_list_widget_item)
     EBAY_LIST_THREAD.work = adjustEbayList
