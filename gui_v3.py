@@ -68,17 +68,14 @@ class GUIv3(QtGui.QMainWindow, Ui_MainWindow):
     def setCentralImage(self,image_path):
         pix = None
         if image_path != None:
-            img = QtGui.QImage(image_path)
-            pix = QtGui.QPixmap.fromImage(img)
+            pix = QtGui.QPixmap(image_path)
             if pix != None:
                 pix = pix.scaled(410,308,aspectRatioMode=QtCore.Qt.KeepAspectRatio)
         if pix == None:
-            img = QtGui.QImage('imgs/no_image.png')
-            pix = QtGui.QPixmap.fromImage(img)
-            if pix != None:
-                pix = pix.scaled(410,308,aspectRatioMode=QtCore.Qt.KeepAspectRatio)
-            
-        self.center_image_label.setPixmap(pix)
+            pix = QtGui.QPixmap('imgs/no_image.png')
+        if pix != None:          
+            self.center_image_label.setPixmap(pix)
+    
     
     def numebay(self):
         return self.num_ebay_spinbox.value()
