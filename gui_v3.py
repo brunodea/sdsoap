@@ -76,6 +76,8 @@ class GUIv3(QtGui.QMainWindow, Ui_MainWindow):
         if pix != None:          
             self.center_image_label.setPixmap(pix)
     
+    def toggleEbaySpinBoxEnabled(self):
+        self.num_ebay_spinbox.setEnabled(not self.num_ebay_spinbox.isEnabled())
     
     def numebay(self):
         return self.num_ebay_spinbox.value()
