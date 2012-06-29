@@ -68,7 +68,9 @@ def downloadImage(gameid):
     IMAGE_PATH = getcover.downloadcover(gameid,'imgs/cover')
     
 def adjustEbayList_finished():
-    THE_GUI.statusBar().showMessage('Buscando no eBay finalizada!')   
+    THE_GUI.statusBar().showMessage('Buscando no eBay finalizada!')
+    if THE_GUI.current_game == None:
+        return
     IMAGE_THREAD.finished.connect(downloadImage_finished)
     IMAGE_THREAD.args = (THE_GUI.current_game.gameid,)
     IMAGE_THREAD.work = downloadImage
